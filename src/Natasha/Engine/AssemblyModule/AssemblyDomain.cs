@@ -134,9 +134,7 @@ namespace Natasha
             {
 
                 stream.Position = 0;
-                var reference = MetadataReference.CreateFromStream(stream);
-                References.Enqueue(reference);
-                AssemblyManagment.AddRererence(reference);
+                References.Enqueue(MetadataReference.CreateFromStream(stream));
 
             }
 
