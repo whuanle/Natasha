@@ -17,7 +17,6 @@ namespace Natasha
         public readonly ConcurrentDictionary<string, Assembly> ClassMapping;
         public readonly ConcurrentDictionary<string, Assembly> DynamicDlls;
         public readonly ConcurrentQueue<PortableExecutableReference> References;
-        public readonly string LibPath;
 
 
 #if NETCOREAPP3_0
@@ -33,21 +32,9 @@ namespace Natasha
 #endif
 
         {
-
-            LibPath = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "NatashaLib", key);
-            if (Directory.Exists(LibPath))
-            {
-
-                Directory.Delete(LibPath, true);
-
-            }
-            Directory.CreateDirectory(LibPath);
-
-
 #if NETCOREAPP3_0
-            _resolver = new AssemblyDependencyResolver(LibPath);
+            _resolver = new AssemblyDependencyResolver(AppDomain.CurrentDomain.BaseDirectory);
 #endif
-
             ClassMapping = new ConcurrentDictionary<string, Assembly>();
             DynamicDlls = new ConcurrentDictionary<string, Assembly>();
             References = new ConcurrentQueue<PortableExecutableReference>();
