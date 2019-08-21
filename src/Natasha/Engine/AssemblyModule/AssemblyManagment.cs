@@ -29,6 +29,14 @@ namespace Natasha
 
 
 
+        public static void AddRererence(PortableExecutableReference portable)
+        {
+            References.Add(portable);
+        }
+
+
+
+
 
         public static AssemblyDomain Create(string key)
         {
