@@ -50,12 +50,7 @@ namespace Natasha
 
             ClassMapping = new ConcurrentDictionary<string, Assembly>();
             DynamicDlls = new ConcurrentDictionary<string, Assembly>();
-
-
-            var _ref = DependencyContext.Default.CompileLibraries
-                                .SelectMany(cl => cl.ResolveReferencePaths())
-                                .Select(asm => MetadataReference.CreateFromFile(asm));
-            References = new ConcurrentQueue<PortableExecutableReference>(_ref);
+            References = new ConcurrentQueue<PortableExecutableReference>();
             this.Unloading += AssemblyDomain_Unloading;
 
         }

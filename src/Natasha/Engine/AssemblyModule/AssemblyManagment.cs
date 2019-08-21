@@ -1,5 +1,9 @@
-﻿using System;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.Extensions.DependencyModel;
+using System;
 using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Natasha
 {
@@ -7,16 +11,21 @@ namespace Natasha
     public class AssemblyManagment
     {
 
-        public static ConcurrentDictionary<string, WeakReference> Cache;
+        public readonly static HashSet<PortableExecutableReference> References;
+        public readonly static ConcurrentDictionary<string, WeakReference> Cache;
         public readonly static AssemblyDomain Default;
         static AssemblyManagment()
         {
 
             Cache = new ConcurrentDictionary<string, WeakReference>();
+            var _ref = DependencyContext.Default.CompileLibraries
+                               .SelectMany(cl => cl.ResolveReferencePaths())
+                               .Select(asm => MetadataReference.CreateFromFile(asm));
+            References = new HashSet<PortableExecutableReference>(_ref);
             Default = Create("Default");
 
         }
-        
+
 
 
 
@@ -57,10 +66,10 @@ namespace Natasha
             else
             {
 
-                Cache[key] = new WeakReference(domain, trackResurrection:true);
+                Cache[key] = new WeakReference(domain, trackResurrection: true);
 
             }
-            
+
         }
 
 
@@ -71,7 +80,11 @@ namespace Natasha
 
             if (Cache.ContainsKey(key))
             {
-                Cache.TryRemove(key,out var result);
+
+                var domain = ((AssemblyDomain)(Cache[key].Target));
+                References.ExceptWith(domain.References);
+                domain.Dispose();
+                Cache.TryRemove(key, out var result);
                 return result;
 
             }

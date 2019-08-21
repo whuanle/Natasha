@@ -94,7 +94,7 @@ namespace Natasha.Complier
                                        optimizationLevel: OptimizationLevel.Release,
                                        allowUnsafe: true),
                                    syntaxTrees: new[] { tree },
-                                   references: domain.References);
+                                   references: AssemblyManagment.References);
 
 
                 //编译并生成程序集
