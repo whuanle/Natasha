@@ -7,10 +7,7 @@
 
   <ItemGroup>
     <PackageReference Include="BenchmarkDotNet" Version="0.11.5" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Natasha\Natasha.csproj" />
+    <PackageReference Include="DotNetCore.Natasha" Version="2.0.0-alpha.4" />
   </ItemGroup>
 
 </Project>
